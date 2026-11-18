@@ -47,13 +47,13 @@ def test_diff_from_standard_user(page: Page, standard: dict, user: str):
 
 
 # Step 2: each difference becomes a named defect test.
-
+@pytest.mark.xfail(reason="Known problem_user defect: all products share one image", strict=True)
 def test_problem_user_images_are_unique(page: Page):
     login(page, "problem_user")
     images = [image for _, image in products(page).values()]
     assert len(set(images)) == len(images), "products share images"
 
-
+@pytest.mark.xfail(reason="Known problem_user defect: Add to cart doesn't register on all products", strict=True)
 def test_problem_user_cannot_add_all_products(page: Page):
     login(page, "problem_user")
     buttons = page.get_by_role("button", name="Add to cart")
@@ -85,7 +85,7 @@ def test_error_user_last_name_rejects_input(page: Page):
     page.get_by_placeholder("Last Name").fill("User")
     expect(page.get_by_placeholder("Last Name")).to_have_value("User")
 
-
+@pytest.mark.xfail(reason="Known visual_user defect: images mismatch after sort", strict=True)
 def test_visual_user_image_follows_product_after_sort(page: Page, standard: dict):
     login(page, "visual_user")
     page.locator(".product_sort_container").select_option("lohi")

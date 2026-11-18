@@ -13,7 +13,7 @@ def login(page: Page, user: str):
     page.get_by_placeholder("Password").fill("secret_sauce")
     page.get_by_role("button", name="Login").click()
     expect(page).to_have_url(INVENTORY)
-
+    expect(page.locator(".inventory_item").first).to_be_visible()
 
 def products(page: Page) -> dict:
     """Maps product name to (price, image src)."""
@@ -74,7 +74,7 @@ def test_error_user_cannot_remove_item(page: Page):
     page.get_by_role("button", name="Remove").first.click()
     expect(page.locator(".shopping_cart_badge")).to_have_count(0)
 
-
+@pytest.mark.xfail(reason="Known error_user defect", strict=True)
 def test_error_user_last_name_rejects_input(page: Page):
     login(page, "error_user")
     page.get_by_role("button", name="Add to cart").first.click()

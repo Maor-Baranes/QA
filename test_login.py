@@ -35,15 +35,24 @@ def standard(browser: Browser) -> dict:
     page.context.close()
     assert data, "standard_user: no products found, selectors are wrong"
     return data
+ALL_PRODUCTS = {
+    "Sauce Labs Backpack", "Sauce Labs Bike Light", "Sauce Labs Bolt T-Shirt",
+    "Sauce Labs Fleece Jacket", "Sauce Labs Onesie", "Test.allTheThings() T-Shirt (Red)"
+}
 
+EXPECTED_DIFFS = {
+    "problem_user": ALL_PRODUCTS,
+    "error_user": set(),
+    "visual_user": ALL_PRODUCTS,
+    "performance_glitch_user": set(),
+}
 
-# Step 1: diff every user against standard_user.
 @pytest.mark.parametrize("user", USERS)
 def test_diff_from_standard_user(page: Page, standard: dict, user: str):
     login(page, user)
     actual = products(page)
-    differences = [name for name in standard if actual.get(name) != standard[name]]
-    print(f"\n{user}: {differences or 'no differences'}")
+    differences = {name for name in standard if actual.get(name) != standard[name]}
+    assert differences == EXPECTED_DIFFS[user], f"{user}: unexpected diff {differences}"
 
 
 # Step 2: each difference becomes a named defect test.

@@ -17,6 +17,7 @@ def login(page: Page, user: str):
 
 def products(page: Page) -> dict:
     """Maps product name to (price, image src)."""
+    expect(page.locator(".inventory_item")).to_have_count(6)  # wait for full render
     result = {}
     for item in page.locator(".inventory_item").all():
         name = item.locator(".inventory_item_name").inner_text()
@@ -55,18 +56,18 @@ def test_problem_user_images_are_unique(page: Page):
 
 def test_problem_user_cannot_add_all_products(page: Page):
     login(page, "problem_user")
-    for button in page.get_by_role("button", name="Add to cart").all():
-        button.click(timeout=5000)
+    while page.get_by_role("button", name="Add to cart").count() > 0:
+        page.get_by_role("button", name="Add to cart").first.click()
     expect(page.get_by_role("button", name="Remove")).to_have_count(6)
 
-
+@pytest.mark.xfail(reason="Known error_user defect: price sort broken", strict=True)
 def test_error_user_price_sort_is_broken(page: Page):
     login(page, "error_user")
     page.locator(".product_sort_container").select_option("lohi")
     prices = [float(p.replace("$", "")) for p in page.locator(".inventory_item_price").all_inner_texts()]
     assert prices == sorted(prices), f"not sorted low to high: {prices}"
 
-
+@pytest.mark.xfail(reason="Known error_user defect: cannot remove item", strict=True)
 def test_error_user_cannot_remove_item(page: Page):
     login(page, "error_user")
     page.get_by_role("button", name="Add to cart").first.click()

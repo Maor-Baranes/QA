@@ -1,7 +1,9 @@
-API and UI Testing - RestfulBooker and SauceDemo integrated to the same CI workflow.
-API Testing:  Implemented CRUD and negative testing using Python Requests and pytest,
-covering resource creation, retrieval, updates, deletion, authentication, and invalid requests.
-UI Testing: Used standard_user as a behavioral baseline to investigate differences between SauceDemo user types.
-Rather than treating every discrepancy as a defect, I analyzed the underlying first causes and identified seven actual defects, documented in Defects.md.
+# QA Automation – API & UI Testing
 
-Thank you for reading, have a nice day :)
+Automated API and UI testing projects for **Restful Booker** and **SauceDemo**, integrated into a single GitHub Actions CI workflow.
+
+**API Testing:** Implemented CRUD and negative testing using Python Requests and pytest, covering resource creation, retrieval, updates, deletion, authentication, and invalid requests.
+
+**UI Testing:** Used `standard_user` as a behavioral baseline to investigate differences across SauceDemo user types. Analyzed discrepancies to distinguish intended behavior from actual defects, identifying seven defects documented in `Defects.md`.
+
+Thank you for reading!
